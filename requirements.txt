@@ -1,5 +1,7 @@
 cmake
 
+gunicorn
+
 Flask==1.1.4
 Flask-Cors==3.0.10
 flask-ngrok==0.0.25

@@ -155,7 +155,6 @@ category_index = label_map_util.create_category_index_from_labelmap(PATH_TO_LABE
 import numpy as np
 import cv2
 import tensorflow as tf
-from google.colab.patches import cv2_imshow
 def form_widget_recognition(image,path=True):
   if path:
     image_np = cv2.imread(image)
