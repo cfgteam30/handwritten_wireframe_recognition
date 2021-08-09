@@ -251,7 +251,7 @@ def design():
     form_widgets=filter_widgets(form_widgets)
     with open("label_boxes.txt","w+") as f:
       f.write('\n'.join([' '.join(map(str, label['box'])) for label in form_widgets if label['class']=='text']))
-    os.system("python ocr_script.py")
+    os.system("python3 ocr_script.py")
     with open("labels.txt","r") as f:
       for label,line in zip([w for w in form_widgets if w['class']=='text'],f.readlines()):
         label['text']=line.strip()
