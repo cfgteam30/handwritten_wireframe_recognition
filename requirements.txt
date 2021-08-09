@@ -19,3 +19,4 @@ psutil==5.4.8
 requests==2.26.0
 
 tensorflow==2.5.0
+lmdb
