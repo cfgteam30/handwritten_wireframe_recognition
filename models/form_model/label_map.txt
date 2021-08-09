@@ -1,0 +1,54 @@
+item {
+    id: 1
+    name: 'text'
+}
+
+item {
+    id: 2
+    name: 'text_box'
+}
+
+item {
+    id: 3
+    name: 'table'
+}
+
+item {
+    id: 4
+    name: 'drop_down'
+}
+
+item {
+    id: 5
+    name: 'date'
+}
+
+item {
+    id: 6
+    name: 'check_box' 
+}
+
+item {
+    id: 7
+    name: 'section_header'
+}
+
+item {
+    id: 8
+    name: 'button'
+}
+
+item {
+    id: 9
+    name: 'radio'
+}
+
+item {
+    id: 10
+    name: 'text_area'
+}
+
+item {
+    id: 11
+    name: 'image'
+}
