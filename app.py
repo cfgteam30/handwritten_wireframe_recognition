@@ -237,6 +237,11 @@ run_with_ngrok(app)   #starts ngrok when the app is run
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+@app.route("/",methods=['GET'])
+@cross_origin()
+def greeting():
+  return json.dumps({'message':"Hello World!"}),200
+
 @app.route("/design",methods=['POST'])
 @cross_origin()
 def design():
