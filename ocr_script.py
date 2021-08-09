@@ -266,7 +266,7 @@ with sess.as_default():
     latest_snapshot = tf.train.latest_checkpoint(model_dir)  # is there a saved model?
     saver.restore(sess, latest_snapshot)
 
-img = cv2.imread("input.jpg",0)
+img = cv2.imread("./input.jpg",0)
 with open("./label_boxes.txt") as f:
     content = f.readlines()
 boxes = [list(map(int,x.strip().split(' '))) for x in content] 
