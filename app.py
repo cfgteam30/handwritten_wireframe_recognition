@@ -221,7 +221,7 @@ print(db.list_collection_names())
 User=db.User
 Form=db.Form
 
-# from flask_ngrok import run_with_ngrok
+from flask_ngrok import run_with_ngrok
 import codecs
 from flask import Flask, request, jsonify, send_from_directory, make_response
 import base64
@@ -233,7 +233,7 @@ import os
 
 
 app = Flask(__name__)
-# run_with_ngrok(app)   #starts ngrok when the app is run
+run_with_ngrok(app)   #starts ngrok when the app is run
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
