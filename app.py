@@ -237,11 +237,6 @@ run_with_ngrok(app)   #starts ngrok when the app is run
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route("/",methods=['GET'])
-@cross_origin()
-def greeting():
-  return json.dumps({'message':"Hello World!"}),200
-
 @app.route("/design",methods=['POST'])
 @cross_origin()
 def design():
@@ -254,10 +249,10 @@ def design():
     cv2.imwrite('./input.jpg',image_np)
     form_widgets=form_widget_recognition(image_np,False)
     form_widgets=filter_widgets(form_widgets)
-    with open("./label_boxes.txt","w+") as f:
+    with open("label_boxes.txt","w+") as f:
       f.write('\n'.join([' '.join(map(str, label['box'])) for label in form_widgets if label['class']=='text']))
-    os.system("python3 ./ocr_script.py")
-    with open("./labels.txt","r") as f:
+    os.system("python ocr_script.py")
+    with open("labels.txt","r") as f:
       for label,line in zip([w for w in form_widgets if w['class']=='text'],f.readlines()):
         label['text']=line.strip()
     form_widgets=associate_widgets(form_widgets)
