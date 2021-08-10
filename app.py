@@ -222,7 +222,7 @@ User=db.User
 Form=db.Form
 
 
-from flask_ngrok import run_with_ngrok
+# from flask_ngrok import run_with_ngrok
 import codecs
 from flask import Flask, request, jsonify, send_from_directory, make_response
 import base64
@@ -235,7 +235,7 @@ from bson import ObjectId
 
 
 app = Flask(__name__)
-run_with_ngrok(app)   #starts ngrok when the app is run
+# run_with_ngrok(app)   #starts ngrok when the app is run
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
@@ -342,4 +342,6 @@ def deleteForm(id):
       return "Couldn't delete form!",409
     return "Form Deleted!",200
 
-app.run()
+if __name__ == '__main__':
+  port = int(os.environ.get('PORT', 5000))
+  app.run(host = '0.0.0.0', port = port)
