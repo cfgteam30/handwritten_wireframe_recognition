@@ -221,6 +221,7 @@ print(db.list_collection_names())
 User=db.User
 Form=db.Form
 
+
 from flask_ngrok import run_with_ngrok
 import codecs
 from flask import Flask, request, jsonify, send_from_directory, make_response
@@ -230,12 +231,18 @@ from PIL import Image
 from flask_cors import CORS, cross_origin
 import json
 import os
+from bson import ObjectId
 
 
 app = Flask(__name__)
 run_with_ngrok(app)   #starts ngrok when the app is run
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
+
+@app.route("/",methods=['GET'])
+@cross_origin()
+def greeting():
+  return json.dumps({'message':"Hello World!"}),200
 
 @app.route("/design",methods=['POST'])
 @cross_origin()
@@ -249,10 +256,10 @@ def design():
     cv2.imwrite('./input.jpg',image_np)
     form_widgets=form_widget_recognition(image_np,False)
     form_widgets=filter_widgets(form_widgets)
-    with open("label_boxes.txt","w+") as f:
+    with open("./label_boxes.txt","w+") as f:
       f.write('\n'.join([' '.join(map(str, label['box'])) for label in form_widgets if label['class']=='text']))
-    os.system("python ocr_script.py")
-    with open("labels.txt","r") as f:
+    os.system("python3 ./ocr_script.py")
+    with open("./labels.txt","r") as f:
       for label,line in zip([w for w in form_widgets if w['class']=='text'],f.readlines()):
         label['text']=line.strip()
     form_widgets=associate_widgets(form_widgets)
@@ -302,15 +309,37 @@ def signup():
     return json.dumps({'id':str(id)}),200
 
 
-@app.route("/user-forms",methods=['POST'])
+@app.route("/user-forms/<id>",methods=['GET'])
 @cross_origin()
-def userForms():
-    id = request.form.get('id')
+def getUserForms(id):
     forms=[]
     for form in Form.find({'user_id':id}):
       form['form_id']=str(form.pop('_id'))
       forms.append(form)
     forms.sort(key=lambda x: x.get('form_name'),reverse=True)
     return json.dumps(forms),200
+
+
+@app.route("/user-forms/<id>",methods=['PUT'])
+@cross_origin()
+def updateForm(id):
+    form_record=json.loads(request.form.get('form'))
+    if Form.find_one({'_id':ObjectId(id)})==None:
+      return "Form doesn't exist", 404
+    updateRes=Form.update_one({'_id':ObjectId(id)},{"$set":form_record})
+    if updateRes.matched_count<=0:
+      return "Couldn't update form!",409
+    return "Form Updated!",200
+
+
+@app.route("/user-forms/<id>",methods=['DELETE'])
+@cross_origin()
+def deleteForm(id):
+    if Form.find_one({'_id':ObjectId(id)})==None:
+      return "Form doesn't exist", 404
+    deleteRes=Form.delete_one({'_id':ObjectId(id)})
+    if deleteRes.deleted_count<=0:
+      return "Couldn't delete form!",409
+    return "Form Deleted!",200
 
 app.run()
